@@ -38,5 +38,9 @@ No requirements.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_linux_function_app_id"></a> [linux\_function\_app\_id](#output\_linux\_function\_app\_id) | Outputs the function app id |
+| <a name="output_linux_function_app_name"></a> [linux\_function\_app\_name](#output\_linux\_function\_app\_name) | Outputs the function app name |
+| <a name="output_linux_function_app_object"></a> [linux\_function\_app\_object](#output\_linux\_function\_app\_object) | Outputs the entire function app object |
 <!-- END_TF_DOCS -->
