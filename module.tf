@@ -15,13 +15,13 @@ resource "azurerm_linux_function_app" "linux-function" {
   functions_extension_version                    = try(var.linux_function.functions_extension_version, "~4")
   ftp_publish_basic_authentication_enabled       = try(var.linux_function.ftp_publish_basic_authentication_enabled, false)
   https_only                                     = try(var.linux_function.https_only, true)
-  public_network_access_enabled                  = try(var.linux_function.public_network_access_enabled, true)
+  public_network_access_enabled                  = try(var.linux_function.public_network_access_enabled, false)
   key_vault_reference_identity_id                = try(var.linux_function.key_vault_reference_identity_id, null)
   storage_account_access_key                     = try(var.linux_function.storage_account_access_key, null)
   storage_account_name                           = local.storage_account_name
   storage_uses_managed_identity                  = try(var.linux_function.storage_uses_managed_identity, null)
   storage_key_vault_secret_id                    = try(var.linux_function.storage_key_vault_secret_id, null)
-  virtual_network_subnet_id                      = try(var.linux_function.virtual_network_subnet_id, null)
+  virtual_network_subnet_id                      = local.subnet_id
   webdeploy_publish_basic_authentication_enabled = try(var.linux_function.webdeploy_publish_basic_authentication_enabled, true)
   vnet_image_pull_enabled                        = try(var.linux_function.vnet_image_pull_enabled, true)
   zip_deploy_file                                = try(var.linux_function.zip_deploy_file, null)
@@ -396,4 +396,19 @@ resource "azurerm_linux_function_app" "linux-function" {
       connection_string_names = try(sticky_settings.value.connection_string_names, null)
     }
   }
+}
+
+# Calls this module if we need a private endpoint attached to the storage account
+module "private_endpoint" {
+  source = "github.com/canada-ca-terraform-modules/terraform-azurerm-caf-private_endpoint.git?ref=v1.0.2"
+  for_each =  try(var.linux_function.private_endpoint, {}) 
+
+  name = "${local.func-name}-${each.key}"
+  location = var.location
+  resource_groups = var.resource_groups
+  subnets = var.subnets
+  private_connection_resource_id = azurerm_linux_function_app.linux-function.id
+  private_endpoint = each.value
+  private_dns_zone_ids = var.private_dns_zone_ids
+  tags = var.tags
 }
