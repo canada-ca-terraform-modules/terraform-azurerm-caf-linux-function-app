@@ -5,7 +5,7 @@ variable "linux-functions" {
 }
 
 module "linux-function" {
-  source = "github.com/canada-ca-terraform-modules/terraform-azurerm-caf-linux-function-app.git?ref=v1.0.0"
+  source = "github.com/canada-ca-terraform-modules/terraform-azurerm-caf-linux-function-app.git?ref=v1.0.1"
   for_each = var.linux-functions
 
   userDefinedString = each.key
