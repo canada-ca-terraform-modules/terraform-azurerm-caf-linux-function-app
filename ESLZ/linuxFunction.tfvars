@@ -8,6 +8,7 @@ linux-functions = {
     # client_certificate_enabled                     = false
     # client_certificate_mode                        = "Optional"
     # client_certificate_exclusion_paths             = ""
+    # create_user_managed_identity                   = false
     # daily_memory_time_quota                        = 0
     # enabled                                        = true
     # content_share_force_disabled                   = false
