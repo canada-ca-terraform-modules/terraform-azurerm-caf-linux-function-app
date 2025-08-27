@@ -4,7 +4,10 @@ resource "azurerm_linux_function_app" "linux-function" {
   resource_group_name = local.resource_group_name
   service_plan_id     = local.asp
 
-  app_settings                                   = try(var.linux_function.app_settings, {})
+  app_settings                                   = merge(
+                                                      { "AZURE_CLIENT_ID" = try(module.linux-function-umi[0].umi-client-id, null) },
+                                                      try(var.linux_function.app_settings, {}), # from the caller, allow overriding of the client id
+                                                  )
   builtin_logging_enabled                        = try(var.linux_function.builtin_logging_enabled, true)
   client_certificate_enabled                     = try(var.linux_function.client_certificate_enabled, false)
   client_certificate_mode                        = try(var.linux_function.client_certificate_mode, "Optional")
@@ -19,7 +22,12 @@ resource "azurerm_linux_function_app" "linux-function" {
   key_vault_reference_identity_id                = try(var.linux_function.key_vault_reference_identity_id, null)
   storage_account_access_key                     = try(var.linux_function.storage_account_access_key, null)
   storage_account_name                           = local.storage_account_name
-  storage_uses_managed_identity                  = try(var.linux_function.storage_uses_managed_identity, null)
+  storage_uses_managed_identity                  = (
+                                                      # if we are creating the managed identity and custom storage,
+                                                      # we are also giving it access to the storage
+                                                      try(var.linux_function.create_user_managed_identity, false) && try(var.linux_function.custom_storage_account, null) != null
+                                                      ? true : try(var.linux_function.storage_uses_managed_identity, null)
+                                                    )
   storage_key_vault_secret_id                    = try(var.linux_function.storage_key_vault_secret_id, null)
   virtual_network_subnet_id                      = local.subnet_id
   webdeploy_publish_basic_authentication_enabled = try(var.linux_function.webdeploy_publish_basic_authentication_enabled, true)
@@ -370,10 +378,16 @@ resource "azurerm_linux_function_app" "linux-function" {
   }
 
   dynamic "identity" {
-    for_each = try(var.linux_function.identity, null) != null ? [1] : []
+    for_each = try(var.linux_function.create_user_managed_identity, false) ? [{
+      type = "UserAssigned"
+      identity_ids = [ module.linux-function-umi[0].umi-id ]
+    }] : try(var.linux_function.identity, null) != null ? [{
+      type = var.linux_function.identity.type
+      identity_ids = var.linux_function.identity.identity_ids
+    }] : []
     content {
-      type         = var.linux_function.identity.type
-      identity_ids = try(var.linux_function.identity.identity_ids, null)
+      type         = identity.value.type
+      identity_ids = identity.value.identity_ids
     }
   }
 
