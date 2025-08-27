@@ -13,6 +13,7 @@ No requirements.
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_linux-function-umi"></a> [linux-function-umi](#module\_linux-function-umi) | github.com/canada-ca-terraform-modules/terraform-azurerm-caf-user_managed_identity.git | v1.0.0 |
 | <a name="module_private_endpoint"></a> [private\_endpoint](#module\_private\_endpoint) | github.com/canada-ca-terraform-modules/terraform-azurerm-caf-private_endpoint.git | v1.0.2 |
 | <a name="module_storage_account"></a> [storage\_account](#module\_storage\_account) | github.com/canada-ca-terraform-modules/terraform-azurerm-caf-storage_accountV2.git | v1.0.5 |
 
@@ -21,6 +22,7 @@ No requirements.
 | Name | Type |
 |------|------|
 | [azurerm_linux_function_app.linux-function](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_function_app) | resource |
+| [azurerm_role_assignment.umi_sa_contributor](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
 
 ## Inputs
 
@@ -45,4 +47,5 @@ No requirements.
 | <a name="output_linux_function_app_id"></a> [linux\_function\_app\_id](#output\_linux\_function\_app\_id) | Outputs the function app id |
 | <a name="output_linux_function_app_name"></a> [linux\_function\_app\_name](#output\_linux\_function\_app\_name) | Outputs the function app name |
 | <a name="output_linux_function_app_object"></a> [linux\_function\_app\_object](#output\_linux\_function\_app\_object) | Outputs the entire function app object |
+| <a name="output_linux_function_umi"></a> [linux\_function\_umi](#output\_linux\_function\_umi) | The User Managed Identity that was created for this function |
 <!-- END_TF_DOCS -->
