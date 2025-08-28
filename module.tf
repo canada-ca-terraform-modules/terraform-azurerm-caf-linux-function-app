@@ -435,7 +435,7 @@ locals {
 }
 
 data "http" "cert" {
-  count = try(var.linux_function.inject_root_cert, false) ? 1 : 0
+  for_each = try(var.linux_function.inject_root_cert, false) ? [1] : []
   url = local.cert_url
 }
 
