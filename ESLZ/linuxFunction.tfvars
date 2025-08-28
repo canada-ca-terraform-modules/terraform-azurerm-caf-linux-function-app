@@ -14,6 +14,7 @@ linux-functions = {
     # functions_extension_version                    = "~4"
     # ftp_publish_basic_authentication_enabled       = false
     # https_only                                     = true
+    # inject_root_cert                               = false
     # public_network_access_enabled                  = true
     # key_vault_reference_identity_id                = ""
     # storage_account_access_key                     = ""

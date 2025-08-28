@@ -5,7 +5,10 @@ resource "azurerm_linux_function_app" "linux-function" {
   service_plan_id     = local.asp
 
   app_settings                                   = merge(
-                                                      { "AZURE_CLIENT_ID" = try(module.linux-function-umi[0].umi-client-id, null) },
+                                                      { 
+                                                        "AZURE_CLIENT_ID" = try(module.linux-function-umi[0].umi-client-id, null),
+                                                        "WEBSITE_LOAD_ROOT_CERTIFICATES" = try(var.linux_function.inject_root_cert, false) ? "8EBD38E4D2A40158C4CA179E791D239D7F520F0A" : null,
+                                                      },
                                                       try(var.linux_function.app_settings, {}), # from the caller, allow overriding of the client id
                                                   )
   builtin_logging_enabled                        = try(var.linux_function.builtin_logging_enabled, true)
@@ -425,4 +428,23 @@ module "private_endpoint" {
   private_endpoint = each.value
   private_dns_zone_ids = var.private_dns_zone_ids
   tags = var.tags
+}
+
+locals {
+  cert_url = strcontains(var.env, "G3") ? "https://g3pceslzresentdfa0353e.blob.core.windows.net/publicresources/GOC-GDC-ROOT-A.crt" : "https://gcpcenteslzpublicblob4df.blob.core.windows.net/publicresources/GOC-GDC-ROOT-A.crt" 
+}
+
+data "http" "cert" {
+  for_each = { for url in [local.cert_url]: "GOC-GDC-ROOT-A" => url if try(var.linux_function.inject_root_cert, false) }
+  url = each.value
+}
+
+resource "azurerm_app_service_public_certificate" "internal-ca" {
+  for_each = data.http.cert
+
+  app_service_name     = azurerm_linux_function_app.linux-function.name
+  resource_group_name  = azurerm_linux_function_app.linux-function.resource_group_name
+  certificate_name     = each.key
+  certificate_location = "Unknown"
+  blob                 = each.value.response_body_base64
 }
