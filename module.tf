@@ -440,7 +440,7 @@ data "http" "cert" {
 }
 
 resource "azurerm_app_service_public_certificate" "internal-ca" {
-  for_each = http.cert
+  for_each = data.http.cert
 
   app_service_name     = azurerm_linux_function_app.linux-function.name
   resource_group_name  = azurerm_linux_function_app.linux-function.resource_group_name
