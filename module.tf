@@ -435,8 +435,8 @@ locals {
 }
 
 data "http" "cert" {
-  for_each = try(var.linux_function.inject_root_cert, false) ? [1] : []
-  url = local.cert_url
+  for_each = { for url in [local.cert_url]: "GOC-GDC-ROOT-A" => url if try(var.linux_function.inject_root_cert, false) }
+  url = each.value
 }
 
 resource "azurerm_app_service_public_certificate" "internal-ca" {
@@ -444,7 +444,7 @@ resource "azurerm_app_service_public_certificate" "internal-ca" {
 
   app_service_name     = azurerm_linux_function_app.linux-function.name
   resource_group_name  = azurerm_linux_function_app.linux-function.resource_group_name
-  certificate_name     = "GOC-GDC-ROOT-A"
+  certificate_name     = each.key
   certificate_location = "Unknown"
   blob                 = each.value.response_body_base64
 }
