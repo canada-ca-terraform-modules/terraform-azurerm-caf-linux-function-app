@@ -446,5 +446,5 @@ resource "azurerm_app_service_public_certificate" "internal-ca" {
   resource_group_name  = azurerm_linux_function_app.linux-function.resource_group_name
   certificate_name     = "GOC-GDC-ROOT-A"
   certificate_location = "Unknown"
-  blob                 = value.response_body_base64
+  blob                 = each.value.response_body_base64
 }
