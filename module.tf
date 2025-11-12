@@ -381,13 +381,7 @@ resource "azurerm_linux_function_app" "linux-function" {
   }
 
   dynamic "identity" {
-    for_each = try(var.linux_function.create_user_managed_identity, false) ? [{
-      type = "UserAssigned"
-      identity_ids = [ module.linux-function-umi[0].umi-id ]
-    }] : try(var.linux_function.identity, null) != null ? [{
-      type = var.linux_function.identity.type
-      identity_ids = var.linux_function.identity.identity_ids
-    }] : []
+    for_each = local.identity
     content {
       type         = identity.value.type
       identity_ids = identity.value.identity_ids
