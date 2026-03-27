@@ -1,3 +1,7 @@
+# terraform-azurerm-caf-linux-function-app
+
+Manages a Linux Function App following the SSC Cloud Adoption Framework naming and tagging standard.
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 

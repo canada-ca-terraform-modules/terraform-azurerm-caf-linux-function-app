@@ -1,6 +1,6 @@
 module "storage_account" {
-  source = "github.com/canada-ca-terraform-modules/terraform-azurerm-caf-storage_accountV2.git?ref=v1.0.5"
-  count = try(var.linux_function.custom_storage_account, null) != null ? 1 : 0
+  source               = "github.com/canada-ca-terraform-modules/terraform-azurerm-caf-storage_accountV2.git?ref=v1.1.0"
+  count                = try(var.linux_function.custom_storage_account, null) != null ? 1 : 0
   userDefinedString    = "${var.userDefinedString}-func-sa"
   location             = var.location
   env                  = var.env
@@ -9,14 +9,14 @@ module "storage_account" {
   private_dns_zone_ids = null
   tags                 = var.tags
   storage_account = {
-    resource_group            = var.linux_function.resource_group
-    account_tier              = "Standard"
-    account_replication_type  = "GRS"
+    resource_group           = var.linux_function.resource_group
+    account_tier             = "Standard"
+    account_replication_type = "GRS"
     private_endpoint = {
-      "func" = {                       
+      "func" = {
         resource_group    = var.linux_function.custom_storage_account.resource_group
-        subnet            = var.linux_function.custom_storage_account.subnet     
-        subresource_names = ["blob"]  
+        subnet            = var.linux_function.custom_storage_account.subnet
+        subresource_names = ["blob"]
       }
     }
   }
