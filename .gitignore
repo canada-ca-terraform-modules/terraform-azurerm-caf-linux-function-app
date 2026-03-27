@@ -10,8 +10,8 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 *.tfvars
-*.tfvars.json
 !ESLZ/*.tfvars
+*.tfvars.json
 .idea/
 .vscode/
 *.swp
