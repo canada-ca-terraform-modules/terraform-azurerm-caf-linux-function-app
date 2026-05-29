@@ -122,7 +122,7 @@ linux-functions = {
 
     custom_storage_account = {
       resource_group = "Project"
-      subnet = "OZ"
+      subnet         = "OZ"
     }
 
     # auth_settings = {
@@ -320,7 +320,10 @@ linux-functions = {
         is_manual_connection = false     # Optional: Possible values: true, false. Default: true
         # local_dns_zone       = "privatelink.blob.core.windows.net"    # Optional: Name of the local DNS zone for the private endpoint. To change this value, you must taint the associated resource
       }
-    } 
+    }
+
+    # --- New in azurerm >= 4.x ---
+    # virtual_network_backup_restore_enabled = false  # Optional: Whether backup and restore operations over the linked virtual network are enabled. Defaults to false.
   }
 }
 
