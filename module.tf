@@ -412,7 +412,7 @@ resource "azurerm_linux_function_app" "linux-function" {
 
 # Calls this module if we need a private endpoint attached to the storage account
 module "private_endpoint" {
-  source   = "github.com/canada-ca-terraform-modules/terraform-azurerm-caf-private_endpoint.git?ref=v1.1.0"
+  source   = "github.com/canada-ca-terraform-modules/terraform-azurerm-caf-private_endpoint.git?ref=v1.2.0"
   for_each = try(var.linux_function.private_endpoint, {})
 
   name                           = "${local.func-name}-${each.key}"
