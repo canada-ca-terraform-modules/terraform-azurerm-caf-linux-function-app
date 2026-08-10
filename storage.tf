@@ -1,5 +1,5 @@
 module "storage_account" {
-  source               = "github.com/canada-ca-terraform-modules/terraform-azurerm-caf-storage_accountV2.git?ref=v1.1.0"
+  source               = "github.com/canada-ca-terraform-modules/terraform-azurerm-caf-storage_accountV2.git?ref=v1.2.0"
   count                = try(var.linux_function.custom_storage_account, null) != null ? 1 : 0
   userDefinedString    = "${var.userDefinedString}-func-sa"
   location             = var.location

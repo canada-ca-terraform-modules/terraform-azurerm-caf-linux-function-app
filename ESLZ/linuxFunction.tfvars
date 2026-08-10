@@ -2,7 +2,7 @@ linux-functions = {
   test = {
     resource_group = "Project"
     ## the ASP value is case sensitive, please double check the group-rg, serverFarms and asp value with the portal resources names 
-    asp            = "asp"
+    asp = "asp"
 
     # app_settings                                   = {}
     # builtin_logging_enabled                        = true
